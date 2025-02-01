@@ -82,7 +82,7 @@
 <script>
     async function getCurrentTime() {
       try {
-          const response = await fetch(`http://localhost:8080/api/time/current`);
+          const response = await fetch(`https://timeanddateapi.onrender.com/api/time/current`);
 
           if (!response.ok) {
               throw new Error("Failed to fetch time and date.");
