@@ -7,16 +7,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Service
 @Builder
 @RequiredArgsConstructor
 public class TimeService {
 
-
+    private static final ZoneId IST_ZONE = ZoneId.of("Asia/Kolkata");
 
     public TimeResponse getCurrentDateTime() {
-        LocalDateTime time = LocalDateTime.now();
+        ZonedDateTime time = ZonedDateTime.now(IST_ZONE);
         return TimeResponse.builder()
                 .year(time.getYear())
                 .month(time.getMonthValue())
