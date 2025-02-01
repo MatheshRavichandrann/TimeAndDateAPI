@@ -7,5 +7,5 @@ RUN mvn clean package -DskipTests
 
 FROM amazoncorretto:21
 WORKDIR /app
-COPY --from=build /target/your-app.jar ./app.jar
+COPY --from=build /target/HuffmanCoder.jar ./app.jar
 CMD ["java", "-jar", "app.jar"]
