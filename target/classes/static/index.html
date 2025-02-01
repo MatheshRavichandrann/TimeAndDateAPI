@@ -3,80 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huffman Encoder/Decoder</title>
+    <title>Time API App</title>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Global Reset */
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
         .container {
-            max-width: 600px;
-            margin: auto;
+            text-align: center;
+            background: white;
+            padding: 50px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            width: 350px;
         }
-        textarea {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 10px;
+
+        h1 {
+            font-size: 26px;
+            color: #0078D7;
+            margin-bottom: 20px;
         }
+
         button {
-            padding: 10px 15px;
-            background-color: #007BFF;
+            background-color: #0078D7;
             color: white;
             border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 8px;
             cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .output {
+            transition: background-color 0.3s ease;
             margin-top: 20px;
-            background: #f8f9fa;
-            padding: 10px;
-            border: 1px solid #ddd;
+        }
+
+        button:hover {
+            background-color: #005fae;
+        }
+
+        p {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #4a4a4a;
+        }
+
+        .result-box {
+            background: #f0f4f7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 18px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <h1>Huffman Encoder/Decoder</h1>
-    <textarea id="inputText" placeholder="Enter your text here"></textarea>
-    <button onclick="encode()">Encode</button>
-    <button onclick="decode()">Decode</button>
-    <div class="output">
-        <p><strong>Output:</strong></p>
-        <p id="outputText"></p>
-    </div>
+    <h1>Get Current Time</h1>
+    <button onclick="getCurrentTime()">Get Time</button>
+    <div id="time-result" class="result-box"></div>
 </div>
+
 <script>
-    const apiUrl = "http://localhost:8080/api/huffman";
+    async function getCurrentTime() {
+      try {
+          const response = await fetch(`http://localhost:8080/api/time/current`);
 
-    function encode() {
-        const input = document.getElementById('inputText').value;
-        fetch(`${apiUrl}/encode`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ input })
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('outputText').innerText = data;
-        });
-    }
+          if (!response.ok) {
+              throw new Error("Failed to fetch time and date.");
+          }
 
-    function decode() {
-        const input = document.getElementById('inputText').value;
-        const encodedText = prompt("Enter the encoded text to decode:");
-        fetch(`${apiUrl}/decode`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ input, encodedText })
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('outputText').innerText = data;
-        });
-    }
+          const data = await response.json();
+
+          // Format the response into a readable time string
+          const formattedTime = `${data.year}-${String(data.month).padStart(2, '0')}-${String(data.day).padStart(2, '0')} ` +
+                                `${String(data.hour).padStart(2, '0')}:${String(data.minute).padStart(2, '0')}:${String(data.second).padStart(2, '0')}`;
+
+          document.getElementById("time-result").innerText = `Current Time: ${formattedTime}`;
+      } catch (error) {
+          document.getElementById("time-result").innerText = `Error: ${error.message}`;
+      }
+  }
+
 </script>
+
 </body>
 </html>

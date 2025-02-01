@@ -1,3 +1,4 @@
+/*
 package com.mugiwara.HuffmanCoder.controller;
 
 import com.mugiwara.HuffmanCoder.service.HuffmanService;
@@ -33,3 +34,4 @@ public class HuffmanController {
     }
 
 }
+*/
